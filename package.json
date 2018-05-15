@@ -1,0 +1,32 @@
+{
+  "name": "relations",
+  "version": "0.1.0",
+  "private": true,
+  "proxy": {
+    "/graphql": {
+      "target": "http://0.0.0.0:8081",
+      "ws": true
+    }
+  },
+  "dependencies": {
+    "apollo-boost": "^0.1.6",
+    "apollo-server": "^2.0.0-beta.1",
+    "graphql": "^0.13.2",
+    "graphql-tag": "^2.9.2",
+    "react": "^16.3.2",
+    "react-apollo": "^2.1.4",
+    "react-dom": "^16.3.2",
+    "react-scripts": "1.1.4"
+  },
+  "scripts": {
+    "start": "npm-run-all -p start:backend start:frontend",
+    "start:frontend": "react-scripts start",
+    "start:backend": "node backend.js",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "npm-run-all": "^4.1.3"
+  }
+}
