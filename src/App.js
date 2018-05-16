@@ -8,9 +8,8 @@ class App extends React.Component {
     return (
       <Query query={gql`
       {
-        books{
-          title
-          author
+        things{
+          name
         }
       }
     `}>
@@ -18,9 +17,9 @@ class App extends React.Component {
       if (loading) return <p>Loading...</p>;
       if (error) return <p>Error :(</p>;
 
-      return data.books.map(({title, author}) => (
-        <div key={title}>
-          <p>{`${title} by ${author}`}</p>
+      return data.things.map(({id, name}) => (
+        <div key={name}>
+          <p>{name}</p>
         </div>
       ));
     }}

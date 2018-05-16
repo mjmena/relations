@@ -1,42 +1,17 @@
-const { ApolloServer, gql } = require('apollo-server');
+const typeDefs = require("./database/typeDefs");
+const { ApolloServer} = require('apollo-server');
 
-  // This is a (sample) collection of books we'll be able to query
-  // the GraphQL server for.  A more complete example might fetch
-  // from an existing data source like a REST API or database.
-  const books = [
-    {
-      title: 'Harry Potter and the Chamber of Secrets',
-      author: 'J.K. Rowling',
-    },
-    {
-      title: 'Jurassic Park',
-      author: 'Michael Crichton',
-    },
-  ];
+const mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/relations');
 
-  // Type definitions define the "shape" of your data and specify
-  // which ways the data can be fetched from the GraphQL server.
-  const typeDefs = gql`
-    # Comments in GraphQL are defined with the hash (#) symbol.
+const Thing = mongoose.model('Thing', { name: String });
 
-    # This "Book" type can be used in other type declarations.
-    type Book {
-      title: String
-      author: String
-    }
-
-    # The "Query" type is the root of all GraphQL queries.
-    # (A "Mutation" type will be covered later on.)
-    type Query {
-      books: [Book]
-    }
-  `;
-
-  // Resolvers define the technique for fetching the types in the
-  // schema.  We'll retrieve books from the "books" array above.
-  const resolvers = {
+(async() => {
+  try{
+    const resolvers = {
     Query: {
-      books: () => books,
+      seed: async () => Thing.findOne({seed:true}),
+      things: async () => Thing.find()
     },
   };
 
@@ -47,6 +22,12 @@ const { ApolloServer, gql } = require('apollo-server');
 
   // This `listen` method launches a web-server.  Existing apps
   // can utilize middleware options, which we'll discuss later.
-  server.listen({port: 8081}).then(({ url }) => {
+  server.listen({port: 8081}).
+  then(({ url }) => {
     console.log(`🚀  Server ready at ${url}`);
-  });
+  })  
+  }catch(err){
+    console.log(err)
+  }
+  
+})();
