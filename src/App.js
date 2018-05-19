@@ -1,30 +1,18 @@
 import React from 'react';
-import './App.css';
-import { Query } from "react-apollo";
-import gql from "graphql-tag";
+import { Switch, Route } from 'react-router-dom'
+
+import Dashboard from './Dashboard';
+import Thing from './Thing';
+
 
 class App extends React.Component {
   render() {
     return (
-      <Query query={gql`
-      {
-        things{
-          name
-        }
-      }
-    `}>
-    {({ loading, error, data }) => {
-      if (loading) return <p>Loading...</p>;
-      if (error) return <p>Error :(</p>;
-
-      return data.things.map(({id, name}) => (
-        <div key={name}>
-          <p>{name}</p>
-        </div>
-      ));
-    }}
-      </Query>
-    );
+      <Switch>
+        <Route exact path='/' component={Dashboard}/>
+        <Route path='/thing/:id' component={Thing}/>
+      </Switch>
+    )
   }
 }
 
