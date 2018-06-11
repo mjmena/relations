@@ -1,15 +1,7 @@
 import React, { Fragment } from 'react';
 import { Mutation } from "react-apollo";
 import { Redirect } from 'react-router-dom'
-import gql from "graphql-tag";
-
-const ADD_THING = gql `
-  mutation addThing($name: String!) {
-    addThing(name: $name) {
-      _id
-      name
-    }
-  }`
+import { ADD_THING } from '../queries'
 
 class AddThing extends React.Component {
   constructor(props) {
@@ -35,7 +27,7 @@ class AddThing extends React.Component {
           <h1>Add Thing</h1>
           <form onSubmit={e => {
             e.preventDefault();
-            addThing({ variables: { name: this.state.name } });
+            addThing({ variables: { name: this.state.name, summary:JSON.stringify({ document: { nodes: [ { object: 'block', type: 'paragraph', nodes: [ { object: 'text', leaves: [ { text: '', }, ], }, ], }, ], }, }) } });
           }}>
             <input type="text" value={this.state.name} onChange={this.handleChange} />
             <button type="submit">Add Thing</button>

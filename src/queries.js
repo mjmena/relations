@@ -8,8 +8,17 @@ export const GET_THINGS = gql `
     }
   }
 `
+export const ADD_THING = gql `
+  mutation addThing($name:String!, $summary: String!) {
+    addThing(name:$name, summary: $summary) {
+      _id
+      name
+      summary
+    }
+  }`
+
 export const UPDATE_THING = gql `
-  mutation updatedThing($id: String!, $name:String, $summary: String) {
+  mutation updateThing($id: String!, $name:String, $summary: String) {
     updateThing(id: $id, name:$name, summary: $summary) {
       _id
       name

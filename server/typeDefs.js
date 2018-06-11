@@ -17,7 +17,7 @@ module.exports = gql `
     }
 
     type Mutation {
-      addThing(name: String!): Thing
+      addThing(name: String!, summary: String!): Thing
       updateThing(id: String!, name: String, summary: String): Thing
     }
   `;

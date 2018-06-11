@@ -15,7 +15,7 @@ mongoose.connect('mongodb://localhost/relations');
       },
       Mutation: {
         addThing: async(root, args) => {
-          const newThing = new Thing({ name: args.name });
+          const newThing = new Thing({ name: args.name, summary: args.summary });
           await newThing.save();
           return newThing;
         },

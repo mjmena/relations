@@ -26,22 +26,6 @@ const submitMention = (change, mention) => {
   return true;
 }
 
-const initialValue = {
-  document: {
-    nodes: [{
-      object: 'block',
-      type: 'paragraph',
-      nodes: [{
-        object: 'text',
-        leaves: [{
-          text: '',
-        }, ],
-      }, ],
-    }, ],
-  },
-}
-
-
 const MentionNode = (props, node) => {
   return (
     <Link to={'/thing/'+props.node.data.get('_id')} {...props.attributes}>{props.node.data.get('name')}</Link>
@@ -62,8 +46,7 @@ export default class SummaryEditor extends React.Component {
 
   static getDerivedStateFromProps(props) {
     return {
-      value: props.summary ?
-        Value.fromJSON(JSON.parse(props.summary)) : Value.fromJSON(initialValue)
+      value: Value.fromJSON(JSON.parse(props.summary))
     }
   }
 
