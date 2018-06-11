@@ -15,4 +15,9 @@ module.exports = gql `
       thing(id: String!): Thing,
       things: [Thing],
     }
+
+    type Mutation {
+      addThing(name: String!): Thing
+      updateThing(id: String!, name: String, summary: String): Thing
+    }
   `;

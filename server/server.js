@@ -13,6 +13,25 @@ mongoose.connect('mongodb://localhost/relations');
         thing: async(root, { id }) => Thing.findById(id),
         things: async() => Thing.find(),
       },
+      Mutation: {
+        addThing: async(root, args) => {
+          const newThing = new Thing({ name: args.name });
+          await newThing.save();
+          return newThing;
+        },
+        updateThing: async(root, args) => {
+          const updateThing = await Thing.findById(args.id)
+          if (args.name) {
+            updateThing.name = args.name;
+          }
+          if (args.summary) {
+            updateThing.summary = args.summary;
+          }
+
+          await updateThing.save();
+          return updateThing;
+        }
+      },
       Thing: {
         relations: async(thing) => {
           let relations = await Relation.find({ participants: thing._id })

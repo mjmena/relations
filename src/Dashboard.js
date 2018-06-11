@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Query } from "react-apollo";
 import gql from "graphql-tag";
-import { Link } from 'react-router-dom'
+import ThingLinkList from './components/ThingLinkList'
 
-class App extends React.Component {
+class Dashboard extends React.Component {
   render() {
-      return (
-        <Query query={gql`
+    return (
+      <Query query={gql`
         {
           things{
             _id
@@ -18,15 +18,16 @@ class App extends React.Component {
         if (loading) return <p>Loading...</p>;
         if (error) return <p>Error :(</p>;
 
-        return data.things.map(({_id, name}) => (
-          <li key={_id}>
-            <Link to={`/thing/${_id}`}>{name}</Link>
-          </li>
-        ));
+        return(
+          <Fragment>
+            <h1>Dashboard</h1>
+            <ThingLinkList things={data.things}/>
+          </Fragment>
+        )
       }}
         </Query>
-      );
+    );
   }
 }
 
-export default App;
+export default Dashboard;
