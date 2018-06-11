@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { Mutation } from "react-apollo";
 import { Redirect } from 'react-router-dom'
-import { ADD_THING } from '../queries'
+import { GET_THINGS, ADD_THING } from '../queries'
 
 class AddThing extends React.Component {
   constructor(props) {
@@ -27,7 +27,15 @@ class AddThing extends React.Component {
           <h1>Add Thing</h1>
           <form onSubmit={e => {
             e.preventDefault();
-            addThing({ variables: { name: this.state.name, summary:JSON.stringify({ document: { nodes: [ { object: 'block', type: 'paragraph', nodes: [ { object: 'text', leaves: [ { text: '', }, ], }, ], }, ], }, }) } });
+            addThing({
+              variables: {
+                name: this.state.name,
+                summary:JSON.stringify({ document: { nodes: [ { object: 'block', type: 'paragraph', nodes: [ { object: 'text', leaves: [ { text: '', }, ], }, ], }, ], }, })
+              },
+              refetchQueries: [
+                {query: GET_THINGS}
+              ]
+            });
           }}>
             <input type="text" value={this.state.name} onChange={this.handleChange} />
             <button type="submit">Add Thing</button>
