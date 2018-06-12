@@ -12,12 +12,13 @@ module.exports = gql `
 
     type Query {
       seed: Thing,
-      thing(id: String!): Thing,
+      thing(id: String!): Thing!,
       things: [Thing],
     }
 
     type Mutation {
       addThing(name: String!, summary: String!): Thing
       updateThing(id: String!, name: String, summary: String): Thing
+      removeThing(id: String!) : Thing
     }
   `;

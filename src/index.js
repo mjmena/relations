@@ -27,6 +27,7 @@ const client = new ApolloClient({
 const theme = {
     primary: 'linen',
     secondary: 'maroon',
+    tertiary: 'saddlebrown',
 }
 
 ReactDOM.render(

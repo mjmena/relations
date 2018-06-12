@@ -30,6 +30,11 @@ mongoose.connect('mongodb://localhost/relations');
 
           await updateThing.save();
           return updateThing;
+        },
+        removeThing: async(root, args) => {
+          const deletedThing = await Thing.findByIdAndRemove(args.id)
+          return deletedThing;
+
         }
       },
       Thing: {
