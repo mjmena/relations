@@ -111,7 +111,9 @@ const MentionPlugin = (options) => {
       submitMention
     },
     portal: (props) => {
-      return props.children(state)
+      const passState = state;
+      passState.submitMention = submitMention;
+      return props.children(passState)
     }
   }
 }

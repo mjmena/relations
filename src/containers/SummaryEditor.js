@@ -4,6 +4,7 @@ import { Editor } from 'slate-react';
 import StickyInlines from 'slate-sticky-inlines'
 import { withRouter } from 'react-router'
 import MentionPlugin from './../plugins/MentionPlugin';
+import MentionDropDown from './../components/MentionDropDown';
 
 const plugins = [
   StickyInlines({
@@ -14,6 +15,8 @@ const plugins = [
     stickOnDelete: false,
   })
 ]
+
+
 
 class SummaryEditor extends React.Component {
   state = {}
@@ -60,23 +63,7 @@ class SummaryEditor extends React.Component {
         autoFocus={true}
       />
       <Portal>
-        {(props)=>{
-        console.log(props)
-          if(!props.suggestions) return null;
-          return props.suggestions.map((suggestion, index) =>{
-            return <div
-              key={suggestion._id}
-              style={{
-                backgroundColor: index===props.selectedSuggestionIndex ? 'red' : 'transparent'
-              }}
-              onClick={(event)=>{
-                event.preventDefault()
-                this.setState({
-                  value:this.state.value.change().call(this.state.mention.changes.submitMention, suggestion).value
-                })
-              }}
-          >{suggestion.name}</div>})
-        }}
+        {(props)=><MentionDropDown {...props} value={this.state.value} updateValue={(value)=>this.setState({value})}  />}
       </Portal>
 
     </Fragment>)
