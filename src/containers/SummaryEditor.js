@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import { Value, Text } from 'slate';
 import { Editor } from 'slate-react';
 import StickyInlines from 'slate-sticky-inlines'
+import { withRouter } from 'react-router'
 import { Link } from 'react-router-dom'
 import { Query } from 'react-apollo'
 import { GET_THING_BY_ID } from '../queries';
@@ -52,7 +53,7 @@ const ActiveMentionNode = (props) => {
   )
 }
 
-export default class SummaryEditor extends React.Component {
+class SummaryEditor extends React.Component {
   state = {
     suggestions: null,
     selectedSuggestion: 0,
@@ -62,6 +63,22 @@ export default class SummaryEditor extends React.Component {
     return {
       value: Value.fromJSON(JSON.parse(props.summary))
     }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.location !== prevProps.location) {
+      console.log("ROUTE CHANGED");
+      this.handleSave(prevProps, prevState);
+    }
+  }
+
+  handleSave = (props, state) => {
+    props.updateThing({
+      variables: {
+        id: props.id,
+        summary: JSON.stringify(state.value.toJSON())
+      }
+    })
   }
 
   handleChange = ({ value }) => {
@@ -113,15 +130,6 @@ export default class SummaryEditor extends React.Component {
     }
   }
 
-  handleSave = (event) => {
-    this.props.updateThing({
-      variables: {
-        id: this.props.id,
-        summary: JSON.stringify(this.state.value.toJSON())
-      }
-    })
-  }
-
   renderNode = props => {
     switch (props.node.type) {
       case 'active_mention':
@@ -133,11 +141,15 @@ export default class SummaryEditor extends React.Component {
     }
   }
 
+  componentWillUnmount() {
+    console.log('unmounting')
+    this.handleSave(this.props, this.state);
+  }
+
   render() {
     return <Fragment>
       <Editor
         value={this.state.value}
-        onBlur={this.handleSave}
         onChange={this.handleChange}
         onKeyDown={this.handleKeyDown}
         renderNode={this.renderNode}
@@ -164,3 +176,5 @@ export default class SummaryEditor extends React.Component {
     </Fragment>
   }
 }
+
+export default withRouter(SummaryEditor)
