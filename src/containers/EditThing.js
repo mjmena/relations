@@ -24,7 +24,7 @@ const Thing = (props) => (
           return (
           <div>
             <Title>{query.data.thing._id}</Title>
-            <EditableThingName id={query.data.thing._id} name={query.data.thing.name} />
+            <EditableThingName key={query.data.thing._id} id={query.data.thing._id} name={query.data.thing.name} />
             <Title>Summary</Title>
             <EditableThingSummary id={query.data.thing._id} summary={query.data.thing.summary} />
             <button onClick={(event)=>deleteThing({

@@ -10,10 +10,8 @@ class EditableThingSummary extends React.Component {
     return (
       <Mutation mutation={UPDATE_THING} >
         {(updateThing) => {
-          return<Query query={GET_THINGS} >
+          return <Query query={GET_THINGS} >
           {({ loading, error, data}) => {
-
-
             if (loading) return <p>Loading...</p>;
             if (error) return <p>Error :(</p>;
 
@@ -34,10 +32,11 @@ class EditableThingSummary extends React.Component {
             var fuse = new Fuse(suggestions, options);
             fuse.search.bind(fuse);
             return <SummaryEditor
+              key={this.props.id}
               id={this.props.id}
               summary={this.props.summary}
               updateThing={updateThing}
-              filterSuggestions={(filter)=>{
+              filter={(filter)=>{
               const filteredSuggestions = fuse.search(filter);
               return filteredSuggestions.length === 0 && filter.length === 0 ? suggestions : filteredSuggestions
             }}/>

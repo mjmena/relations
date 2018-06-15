@@ -28,6 +28,7 @@ const MentionPlugin = (options) => {
     return (
       <Query query={GET_THING_BY_ID} variables={{id:props.node.data.get('_id')}}>
         {({loading, error, data})=>{
+          console.log(props.attributes)
           if (loading) return <Link to={'/thing/'+props.node.data.get('_id')} {...props.attributes}>{props.node.data.get('name')}</Link>
           if (error) return <BrokenLink>{props.node.data.get('name')}</BrokenLink>;
           return <Link to={'/thing/'+data.thing._id} {...props.attributes}>{data.thing.name}</Link>
@@ -93,9 +94,9 @@ const MentionPlugin = (options) => {
   const renderNode = props => {
     switch (props.node.type) {
       case 'active_mention':
-        return <ActiveMentionNode {...props} />
+        return <ActiveMentionNode {...props.attributes} {...props} />
       case 'mention':
-        return <MentionNode {...props} />
+        return <MentionNode {...props.attributes} {...props} />
       default:
         return
     }

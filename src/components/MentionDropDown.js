@@ -1,19 +1,15 @@
 import React from 'react';
+import styled from 'styled-components';
+
+const Option = styled.div `
+  border: 1px solid ${props => props.theme.tertiary}
+  width: 100px
+`
 
 export default (props) => {
-  console.log(props)
   if (!props.suggestions) return null;
+
   return props.suggestions.map((suggestion, index) => {
-    return <div
-        key={suggestion._id}
-        style={{
-          backgroundColor: index===props.selectedSuggestionIndex ? 'red' : 'transparent'
-        }}
-        onClick={(event)=>{
-          console.log("click")
-          event.preventDefault()
-          props.updateValue(props.value.change().call(props.submitMention, suggestion).value)
-        }}
-    >{suggestion.name}</div>
+    return <Option key={suggestion._id}>{suggestion.name}</Option>
   })
 }

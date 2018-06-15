@@ -61,7 +61,11 @@ mongoose.connect('mongodb://localhost/relations');
 
     // This `listen` method launches a web-server.  Existing apps
     // can utilize middleware options, which we'll discuss later.
-    server.listen({ port: 8081 }).
+    server.listen({
+      http: {
+        port: 8081
+      }
+    }).
     then(({ url }) => {
       console.log(`🚀  Server ready at ${url}`);
     })

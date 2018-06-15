@@ -30,7 +30,7 @@ class AddThing extends React.Component {
             addThing({
               variables: {
                 name: this.state.name,
-                summary:JSON.stringify({ document: { nodes: [ { object: 'block', type: 'paragraph', nodes: [ { object: 'text', leaves: [ { text: '', }, ], }, ], }, ], }, })
+                summary:JSON.stringify({ document: { nodes: [ { object: 'block', type: 'paragraph', nodes: [ { object: 'text', leaves: [ { text: 'here', }, ], }, ], }, ], }, })
               },
               refetchQueries: [
                 {query: GET_THINGS}

@@ -1,73 +1,55 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Value } from 'slate';
 import { Editor } from 'slate-react';
-import StickyInlines from 'slate-sticky-inlines'
-import { withRouter } from 'react-router'
-import MentionPlugin from './../plugins/MentionPlugin';
-import MentionDropDown from './../components/MentionDropDown';
+import memoize from 'memoize-one';
 
-const plugins = [
-  StickyInlines({
-    allowedTypes: ['active_mention'],
-    bannedTypes: ['mention'],
-    canBeEmpty: false,
-    hasStickyBoundaries: false,
-    stickOnDelete: false,
-  })
-]
-
-
+import MentionDropDown from './../components/MentionDropDown'
+import MentionPlugin from './../plugins/ConvertMentionPlugin'
 
 class SummaryEditor extends React.Component {
-  state = {}
 
-  static getDerivedStateFromProps(props) {
-    const mention = MentionPlugin({ filterSuggestions: props.filterSuggestions });
-    return {
+  constructor(props) {
+    super(props)
+    this.state = {
       value: Value.fromJSON(JSON.parse(props.summary)),
-      mention,
-      plugins: plugins.concat([mention.plugin])
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (this.props.location !== prevProps.location) {
-      this.handleSave(prevProps, prevState);
-    }
-  }
-
-  handleSave = (props, state) => {
-    props.updateThing({
+  componentWillUnmount() {
+    this.props.updateThing({
       variables: {
-        id: props.id,
-        summary: JSON.stringify(state.value.toJSON())
+        id: this.props.id,
+        summary: JSON.stringify(this.state.value.toJSON())
       }
     })
   }
+
+  getMentionPlugin = memoize(
+    id => MentionPlugin({ filter: this.props.filter })
+  );
 
   handleChange = ({ value }) => {
     this.setState({ value })
   }
 
-  componentWillUnmount() {
-    this.handleSave(this.props, this.state);
-  }
-
   render() {
-    const Portal = this.state.mention.portal;
-    return (<Fragment>
-      <Editor
-        value={this.state.value}
-        onChange={this.handleChange}
-        plugins={this.state.plugins}
-        autoFocus={true}
-      />
-      <Portal>
-        {(props)=><MentionDropDown {...props} value={this.state.value} updateValue={(value)=>this.setState({value})}  />}
-      </Portal>
 
-    </Fragment>)
+    const MemoizedMentionPlugin = this.getMentionPlugin(this.props.id)
+
+    return (
+      <React.Fragment>
+        <Editor
+          value={this.state.value}
+          onChange={this.handleChange}
+          plugins={MemoizedMentionPlugin.plugins}
+          autoFocus={true}
+        />
+        <MemoizedMentionPlugin.portal>
+          {(props) => <MentionDropDown {...props} />}
+        </MemoizedMentionPlugin.portal>
+      </React.Fragment>
+    )
   }
 }
 
-export default withRouter(SummaryEditor)
+export default SummaryEditor
