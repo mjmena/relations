@@ -1,13 +1,10 @@
 import React from 'react';
 import { Value } from 'slate';
 import { Editor } from 'slate-react';
-import memoize from 'memoize-one';
-
 import MentionDropDown from './../components/MentionDropDown'
-import MentionPlugin from './../plugins/ConvertMentionPlugin'
+import MentionPlugin from './../plugins/MentionPlugin'
 
 class SummaryEditor extends React.Component {
-
   constructor(props) {
     super(props)
     this.state = {
@@ -24,29 +21,27 @@ class SummaryEditor extends React.Component {
     })
   }
 
-  getMentionPlugin = memoize(
-    id => MentionPlugin({ filter: this.props.filter })
-  );
-
   handleChange = ({ value }) => {
+    this.updateValue(value)
+  }
+
+  updateValue = (value) => {
     this.setState({ value })
   }
 
   render() {
-
-    const MemoizedMentionPlugin = this.getMentionPlugin(this.props.id)
-
     return (
       <React.Fragment>
         <Editor
           value={this.state.value}
           onChange={this.handleChange}
-          plugins={MemoizedMentionPlugin.plugins}
+          plugins={MentionPlugin.plugins}
           autoFocus={true}
         />
-        <MemoizedMentionPlugin.portal>
-          {(props) => <MentionDropDown {...props} />}
-        </MemoizedMentionPlugin.portal>
+        <MentionPlugin.portal value={this.state.value}>
+            {(props) => <MentionDropDown {...props} updateValue={this.updateValue} filter={this.props.filter}/>}
+        </MentionPlugin.portal>
+
       </React.Fragment>
     )
   }

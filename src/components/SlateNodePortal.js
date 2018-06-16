@@ -17,7 +17,6 @@ class SlateNodePortal extends React.Component {
     if (!this.props.node) return
     this.element.style.position = 'absolute'
     const box = findDOMNode(this.props.node).getBoundingClientRect()
-    console.log(box);
     this.element.style.top = `${box.top + box.height}px`
     this.element.style.left = `${box.left}px`
   }

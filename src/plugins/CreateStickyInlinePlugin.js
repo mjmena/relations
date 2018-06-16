@@ -5,7 +5,7 @@ const CreateStickyInlinePlugin = (options) => {
   let { trigger, type, StickyInlineNode } = options;
 
   const onKeyDown = (event, change) => {
-    if (event.key === trigger) {
+    if (!change.value.focusInline && event.key === trigger) {
       change
         .insertInline({
           type: type,
