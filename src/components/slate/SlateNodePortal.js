@@ -8,17 +8,22 @@ class SlateNodePortal extends React.Component {
     nodeAnchor: 'bottom middle',
   };
 
-  constructor(props) {
-    super(props)
-    this.element = document.createElement('div');
-  }
-
-  componentDidUpdate() {
+  updatePosition = () => {
     if (!this.props.node) return
     this.element.style.position = 'absolute'
     const box = findDOMNode(this.props.node).getBoundingClientRect()
     this.element.style.top = `${box.top + box.height}px`
     this.element.style.left = `${box.left}px`
+  }
+
+  constructor(props) {
+    super(props)
+    this.element = document.createElement('div');
+    this.updatePosition()
+  }
+
+  componentDidUpdate() {
+    this.updatePosition()
   }
 
   componentDidMount() {

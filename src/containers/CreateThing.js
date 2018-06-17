@@ -35,7 +35,7 @@ class AddThing extends React.Component {
               refetchQueries: [
                 {query: GET_THINGS}
               ]
-            });
+            })
           }}>
             <input type="text" value={this.state.name} onChange={this.handleChange} />
             <button type="submit">Add Thing</button>

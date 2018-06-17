@@ -3,7 +3,7 @@ import StickyInlines from 'slate-sticky-inlines'
 import CreateStickyInlinePlugin from './CreateStickyInlinePlugin';
 import ActiveMentionNode from './../components/slate/ActiveMentionNode';
 import MentionNode from './../components/slate/MentionNode';
-import SlateNodePortal from './../components/SlateNodePortal'
+import SlateNodePortal from './../components/slate/SlateNodePortal'
 
 const StickyInlinePlugin = StickyInlines({
   allowedTypes: ['active_mention'],

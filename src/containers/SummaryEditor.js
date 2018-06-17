@@ -1,7 +1,7 @@
 import React from 'react';
 import { Value } from 'slate';
 import { Editor } from 'slate-react';
-import MentionDropDown from './../components/MentionDropDown'
+import MentionDropDown from './MentionDropDownContainer'
 import MentionPlugin from './../plugins/MentionPlugin'
 
 class SummaryEditor extends React.Component {
