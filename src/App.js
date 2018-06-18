@@ -21,11 +21,11 @@ class App extends React.Component {
       <Background>
         <Header />
         <Body>
-        <Switch>
-          <Route exact path='/' component={Dashboard}/>
-          <Route exact path='/thing' component = { CreateThing } />
-          <Route path = '/thing/:id' component = { EditThing } />
-        </Switch>
+          <Switch>
+            <Route exact path='/' component={Dashboard}/>
+            <Route exact path='/thing' component = { CreateThing } />
+            <Route path = '/thing/:id' component = { EditThing } />
+          </Switch>
         </Body>
       </Background>
     )

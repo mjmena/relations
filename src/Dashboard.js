@@ -1,28 +1,21 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Query } from "react-apollo";
-import gql from "graphql-tag";
 import ThingLinkList from './components/ThingLinkList'
+import { GET_THINGS } from './queries'
 
 class Dashboard extends React.Component {
   render() {
     return (
-      <Query query={gql`
-        {
-          things{
-            id
-            name
-          }
-        }
-      `}>
+      <Query query={GET_THINGS}>
       {({ loading, error, data }) => {
         if (loading) return <p>Loading...</p>;
         if (error) return <p>Error :(</p>;
 
         return(
-          <Fragment>
+          <React.Fragment>
             <h1>Dashboard</h1>
             <ThingLinkList things={data.things}/>
-          </Fragment>
+          </React.Fragment>
         )
       }}
         </Query>

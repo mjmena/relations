@@ -1,17 +1,8 @@
 import React from 'react';
 import { Query } from "react-apollo";
-import gql from "graphql-tag";
 import Fuse from 'fuse.js'
-import Searchbar from './components/Searchbar'
-
-const GET_THINGS = gql `
-  {
-    things {
-      id
-      name
-    }
-  }
-`
+import Searchbar from './../components/Searchbar'
+import { GET_THINGS } from './../queries'
 
 class SearchContainer extends React.Component {
   render() {

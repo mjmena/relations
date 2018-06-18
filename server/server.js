@@ -1,7 +1,7 @@
 const typeDefs = require("./typeDefs");
 const { ApolloServer } = require('apollo-server');
 const mongoose = require('mongoose');
-const { Thing, Relation } = require('./models');
+const { Thing } = require('./models');
 
 mongoose.connect('mongodb://localhost/relations');
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import SearchContainer from './SearchContainer';
+import SearchContainer from './containers/SearchContainer';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 
