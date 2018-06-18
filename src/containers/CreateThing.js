@@ -20,7 +20,7 @@ class AddThing extends React.Component {
       <Mutation mutation={ADD_THING} >
         {(addThing, { data }) => {
           if(data){
-            return <Redirect to={`/thing/${data.addThing._id}`} />
+            return <Redirect to={`/thing/${data.addThing.id}`} />
           }
         return (
           <Fragment>
@@ -30,7 +30,7 @@ class AddThing extends React.Component {
             addThing({
               variables: {
                 name: this.state.name,
-                summary:JSON.stringify({ document: { nodes: [ { object: 'block', type: 'paragraph', nodes: [ { object: 'text', leaves: [ { text: 'here', }, ], }, ], }, ], }, })
+                summary:JSON.stringify({ document: { nodes: [ { object: 'block', type: 'paragraph', nodes: [ { object: 'text', leaves: [ { text: '', }, ], }, ], }, ], }, })
               },
               refetchQueries: [
                 {query: GET_THINGS}

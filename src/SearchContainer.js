@@ -7,7 +7,7 @@ import Searchbar from './components/Searchbar'
 const GET_THINGS = gql `
   {
     things {
-      _id
+      id
       name
     }
   }

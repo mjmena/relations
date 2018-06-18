@@ -9,7 +9,6 @@ mongoose.connect('mongodb://localhost/relations');
   try {
     const resolvers = {
       Query: {
-        seed: async() => Thing.findOne({ seed: true }),
         thing: async(root, { id }) => Thing.findById(id),
         things: async() => Thing.find(),
       },
@@ -17,6 +16,7 @@ mongoose.connect('mongodb://localhost/relations');
         addThing: async(root, args) => {
           const newThing = new Thing({ name: args.name, summary: args.summary });
           await newThing.save();
+
           return newThing;
         },
         updateThing: async(root, args) => {
@@ -34,22 +34,34 @@ mongoose.connect('mongodb://localhost/relations');
         removeThing: async(root, args) => {
           const deletedThing = await Thing.findByIdAndRemove(args.id)
           return deletedThing;
-
-        }
-      },
-      Thing: {
-        relations: async(thing) => {
-          let relations = await Relation.find({ participants: thing._id })
-
-          const reducer = (relationships, { participants }) => {
-            if (thing._id.equals(participants[0])) {
-              return relationships.concat(participants[1])
+        },
+        addRelation: async(root, args) => {
+          const thing = await Thing.findByIdAndUpdate(args.from, {
+            $push: {
+              relations: {
+                to: args.to
+              }
             }
-            else return relationships.concat(participants[0])
-          }
+          })
+          thing.save()
+          return Thing.findById(args.to);
+        },
+        removeRelation: async(roots, args) => {
+          const thing = await Thing.findByIdAndUpdate(args.from, {
+            $pull: {
+              relations: {
+                to: args.to
+              }
+            }
+          })
+          thing.save()
+          return Thing.findById(args.to);
+        }
 
-          const others = relations.reduce(reducer, [])
-          return Thing.find({ _id: others })
+      },
+      Relation: {
+        to: async(relation) => {
+          return Thing.findById(relation.to)
         }
       }
     };

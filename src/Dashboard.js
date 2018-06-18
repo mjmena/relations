@@ -9,7 +9,7 @@ class Dashboard extends React.Component {
       <Query query={gql`
         {
           things{
-            _id
+            id
             name
           }
         }

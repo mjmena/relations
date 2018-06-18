@@ -23,13 +23,13 @@ const Thing = (props) => (
           }
           return (
           <div>
-            <Title>{query.data.thing._id}</Title>
-            <EditableThingName key={query.data.thing._id} id={query.data.thing._id} name={query.data.thing.name} />
+            <Title>{query.data.thing.id}</Title>
+            <EditableThingName key={query.data.thing.id} id={query.data.thing.id} name={query.data.thing.name} />
             <Title>Summary</Title>
-            <EditableThingSummary id={query.data.thing._id} summary={query.data.thing.summary} />
+            <EditableThingSummary id={query.data.thing.id} summary={query.data.thing.summary} />
             <button onClick={(event)=>deleteThing({
               variables: {
-                id:query.data.thing._id
+                id:query.data.thing.id
               },
               refetchQueries: [
                 {query: GET_THINGS}

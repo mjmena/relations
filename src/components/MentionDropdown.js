@@ -17,7 +17,7 @@ class MentionDropDown extends React.Component {
     if (props.search !== state.previousSearch) {
       return {
         previousSearch: props.search,
-        suggestions: props.filter(props.search).concat({ _id: 0, name: "Add " + (props.search ? props.search : "a Thing") }),
+        suggestions: props.filter(props.search).concat({ id: 0, name: "Add " + (props.search ? props.search : "a Thing") }),
         selectedSuggestionIndex: 0
       };
     }
@@ -88,7 +88,7 @@ class MentionDropDown extends React.Component {
     return this.state.suggestions.map((suggestion, index) => {
       let selected = index === Math.abs(this.state.selectedSuggestionIndex) % this.state.suggestions.length;
       return <Option
-          key={suggestion._id}
+          key={suggestion.id}
           selected={selected}
           onMouseOver={event => this.handleMouseOver(event, index)}
           onClick={event => this.handleClick(event, suggestion)}
