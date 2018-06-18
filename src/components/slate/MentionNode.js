@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Query } from 'react-apollo';
+import { Query, Mutation } from 'react-apollo';
 import styled from 'styled-components';
 import MentionNodeTooltip from './MentionNodeTooltip'
-import { GET_THING_BY_ID } from '../../queries';
+import { GET_THING_BY_ID, REMOVE_RELATION } from '../../queries';
 
 const BrokenLink = styled.span `
   color:red;
@@ -29,7 +29,15 @@ class MentionNode extends React.Component {
         .map(mentionNode => mentionNode.data.get("id"))
       //does the current node share an id with another mention currently in the document
       if (!mentions.includes(this.props.node.data.get('id'))) {
-        console.log('should delete relationship')
+        const to = this.props.node.data.get('id')
+        const from = this.props.editor.value.data.get('id')
+
+        this.props.removeRelation({
+          variables: {
+            from,
+            to
+          }
+        })
       }
     }
   }
@@ -53,4 +61,8 @@ class MentionNode extends React.Component {
   }
 }
 
-export default MentionNode;
+export default (props) => {
+  return <Mutation mutation={REMOVE_RELATION} >
+    { removeRelation => <MentionNode {...props} removeRelation={removeRelation} /> }
+  </Mutation>
+}

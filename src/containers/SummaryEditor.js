@@ -8,7 +8,13 @@ class SummaryEditor extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      value: Value.fromJSON(JSON.parse(props.summary)),
+      value: Value.fromJSON(JSON.parse(props.summary), {
+        plugins: [{
+          data: {
+            id: this.props.id
+          }
+        }]
+      }),
     }
   }
 
@@ -21,8 +27,8 @@ class SummaryEditor extends React.Component {
     })
   }
 
-  handleChange = ({ value }) => {
-    this.updateValue(value)
+  handleChange = (change) => {
+    this.updateValue(change.value)
   }
 
   updateValue = (value) => {
@@ -39,7 +45,7 @@ class SummaryEditor extends React.Component {
           autoFocus={true}
         />
         <MentionPlugin.portal value={this.state.value}>
-            {(props) => <MentionDropDown {...props} updateValue={this.updateValue} filter={this.props.filter}/>}
+            {(props) => <MentionDropDown {...props} updateValue={this.updateValue} filter={this.props.filter} id={this.props.id}/>}
         </MentionPlugin.portal>
 
       </React.Fragment>

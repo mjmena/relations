@@ -71,9 +71,23 @@ class MentionDropDown extends React.Component {
         }
       }).then(data => {
         this.props.updateValue(this.props.value.change().call(this.props.submitMention, data.data.addThing).value)
+        this.props.addRelation({
+          variables: {
+            from: this.props.id,
+            to: data.data.addThing.id
+          }
+        })
       })
     }
     else {
+      if (!this.props.relations.find(relation => relation.to.id === suggestion.id)) {
+        this.props.addRelation({
+          variables: {
+            from: this.props.id,
+            to: suggestion.id
+          }
+        })
+      }
       this.props.updateValue(this.props.value.change().call(this.props.submitMention, suggestion).value)
     }
   }

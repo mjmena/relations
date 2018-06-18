@@ -22,6 +22,7 @@ const CreateMentionInlinePlugin = CreateStickyInlinePlugin({
 let plugins = [StickyInlinePlugin, CreateMentionInlinePlugin]
 
 const MentionPlugin = (options) => {
+
   let search = '';
 
   const isFocusingActiveMention = (value) => value.focusInline && value.focusInline.type === "active_mention"
@@ -59,10 +60,11 @@ const MentionPlugin = (options) => {
         return
     }
   }
+
   plugins = [{
     onChange,
     onKeyDown,
-    renderNode
+    renderNode,
   }].concat(plugins)
 
   return {
@@ -75,4 +77,4 @@ const MentionPlugin = (options) => {
   }
 }
 
-export default MentionPlugin();
+export default MentionPlugin({ data: { name: "Martin" } });

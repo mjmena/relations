@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import { Mutation } from "react-apollo";
 import { Redirect } from 'react-router-dom'
 import { GET_THINGS, ADD_THING } from '../queries'
+import { Value } from 'slate'
 
 class AddThing extends React.Component {
   constructor(props) {
@@ -27,10 +28,11 @@ class AddThing extends React.Component {
           <h1>Add Thing</h1>
           <form onSubmit={e => {
             e.preventDefault();
+            let summary = Value.create({document: { nodes: [ { object: 'block', type: 'paragraph', nodes: [ { object: 'text', leaves: [ { text: '', }, ], }, ], }, ], }, })
             addThing({
               variables: {
                 name: this.state.name,
-                summary:JSON.stringify({ document: { nodes: [ { object: 'block', type: 'paragraph', nodes: [ { object: 'text', leaves: [ { text: '', }, ], }, ], }, ], }, })
+                summary:JSON.stringify(summary.toJSON())
               },
               refetchQueries: [
                 {query: GET_THINGS}
