@@ -1,7 +1,7 @@
 import React from 'react';
 import { Query, Mutation } from "react-apollo";
 import styled from 'styled-components';
-import EditableThingName from './EditableThingName'
+import ThingLinkList from './../components/ThingLinkList'
 import EditableThingSummary from './EditableThingSummary'
 import { Redirect } from 'react-router-dom'
 
@@ -9,6 +9,18 @@ import { GET_THING_BY_ID, GET_THINGS, REMOVE_THING } from '../queries';
 
 const Title = styled.div `
   font-size: 2em;
+`
+
+const Left = styled.div `
+  width: 50%
+  overflow:scroll
+  height: 100%
+  float:left
+`
+
+const Right = styled.div `
+  width: 50%
+  float: left
 `
 
 const Thing = (props) => (
@@ -22,11 +34,15 @@ const Thing = (props) => (
             return <Redirect to={`/`} />
           }
           return (
-          <div>
-            <Title>{query.data.thing.id}</Title>
-            <EditableThingName key={query.data.thing.id} id={query.data.thing.id} name={query.data.thing.name} />
+          <React.Fragment>
+            <Title>{query.data.thing.name}</Title>
             <Title>Summary</Title>
-            <EditableThingSummary id={query.data.thing.id} summary={query.data.thing.summary} />
+            <Left>
+              <EditableThingSummary id={query.data.thing.id} summary={query.data.thing.summary} />
+            </Left>
+            <Right>
+              <ThingLinkList things={query.data.thing.relations.map(relation=>relation.to)} />
+            </Right>
             <button onClick={(event)=>deleteThing({
               variables: {
                 id:query.data.thing.id
@@ -35,7 +51,7 @@ const Thing = (props) => (
                 {query: GET_THINGS}
               ]
             })}>Delete {query.data.thing.name}</button>
-          </div>
+          </React.Fragment>
         )
       }}
       </Mutation>

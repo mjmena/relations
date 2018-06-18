@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Query, Mutation } from 'react-apollo';
 import styled from 'styled-components';
 import MentionNodeTooltip from './MentionNodeTooltip'
-import { GET_THING_BY_ID, REMOVE_RELATION } from '../../queries';
+import { GET_THING_BY_ID, REMOVE_RELATION, GET_RELATIONS_BY_ID } from '../../queries';
 
 const BrokenLink = styled.span `
   color:red;
@@ -62,7 +62,14 @@ class MentionNode extends React.Component {
 }
 
 export default (props) => {
-  return <Mutation mutation={REMOVE_RELATION} >
+  return <Mutation mutation={REMOVE_RELATION} refetchQueries={[
+          {
+            query:GET_RELATIONS_BY_ID,
+            variables: {
+              id:props.editor.value.data.get('id')
+            }
+          }
+        ]}>
     { removeRelation => <MentionNode {...props} removeRelation={removeRelation} /> }
   </Mutation>
 }

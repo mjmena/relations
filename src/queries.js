@@ -14,6 +14,12 @@ export const GET_THING_BY_ID = gql `
       id
       name
       summary
+      relations{
+        to{
+          id
+          name
+        }
+      }
     }
   }
 `

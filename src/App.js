@@ -11,11 +11,16 @@ const Background = styled.div `
   height: ${props => props.height}px
   width: ${props => props.width}px
   background: ${props => props.theme.primary}
+  overflow:hidden
   color: ${props => props.theme.secondary}
   font-family: 'Josefin Sans', 'sans-serif'
+
 `
+
 const Body = styled.div `
-  clear: both;
+  height: 95%
+  width: 100%
+  float:left
 `
 class App extends React.Component {
   render() {
@@ -29,7 +34,7 @@ class App extends React.Component {
                 <Route exact path='/thing' component = { CreateThing } />
                 <Route path = '/thing/:id' component = { EditThing } />
               </Switch>
-            </Body>
+              </Body>
           </Background>
         }
       </Resize>
