@@ -22,6 +22,7 @@ class SummaryEditor extends React.Component {
     this.props.updateThing({
       variables: {
         id: this.props.id,
+        name: this.props.name,
         summary: JSON.stringify(this.state.value.toJSON())
       }
     })

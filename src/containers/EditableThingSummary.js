@@ -26,8 +26,8 @@ class EditableThingSummary extends React.Component {
                 "name"
               ]
             };
-
-            const suggestions = data.things.filter(thing=>thing._id !== this.props.id);
+            //Filter self from mention
+            const suggestions = data.things.filter(thing=>thing.id !== this.props.id);
 
             var fuse = new Fuse(suggestions, options);
             fuse.search.bind(fuse);

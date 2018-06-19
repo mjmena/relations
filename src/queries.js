@@ -9,7 +9,7 @@ export const GET_THINGS = gql `
   }
 `
 export const GET_THING_BY_ID = gql `
-  query getThingByID($id: String!) {
+  query getThingByID($id: ID!) {
     thing(id: $id) {
       id
       name
@@ -25,7 +25,7 @@ export const GET_THING_BY_ID = gql `
 `
 
 export const GET_RELATIONS_BY_ID = gql `
-  query getRelationByID($id: String!) {
+  query getRelationByID($id: ID!) {
     thing(id: $id) {
       id
       relations{
@@ -47,24 +47,33 @@ export const ADD_THING = gql `
   }`
 
 export const ADD_RELATION = gql `
-  mutation addRelation($to:String!, $from: String!) {
+  mutation addRelation($to:ID!, $from: ID!) {
     addRelation(to:$to, from: $from) {
-      id
-      name
+      to {
+        id
+      }
+      from {
+        id
+      }
     }
   }
 `
 
 export const REMOVE_RELATION = gql `
-  mutation removeRelation($to:String!, $from: String!) {
+  mutation removeRelation($to:ID!, $from: ID!) {
     removeRelation(to:$to, from: $from) {
-      id
+      to{
+        id
+      }
+      from{
+        id
+      }
     }
   }
 `
 
 export const UPDATE_THING = gql `
-  mutation updateThing($id: String!, $name:String, $summary: String) {
+  mutation updateThing($id: ID!, $name:String, $summary: String) {
     updateThing(id: $id, name:$name, summary: $summary) {
       id
       name
@@ -73,7 +82,7 @@ export const UPDATE_THING = gql `
   }`
 
 export const REMOVE_THING = gql `
-  mutation removeThing($id: String!) {
+  mutation removeThing($id: ID!) {
     removeThing(id: $id){
       id
     }

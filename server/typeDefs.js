@@ -4,28 +4,31 @@ const { gql } = require("apollo-server");
 // which ways the data can be fetched from the GraphQL server.
 module.exports = gql `
     type Thing {
-      id: String,
+      id: ID,
       name: String,
       summary: String,
-      relations: [Relation]
+      relations: [Relation],
+      mentions: [Relation],
+      mentionedBy: [Relation],
     }
 
     type Relation {
+      from: Thing,
       to: Thing,
       description: String
     }
 
     type Query {
-      thing(id: String!): Thing!,
+      thing(id: ID!): Thing!,
       things: [Thing]
     }
 
     type Mutation {
       addThing(name: String!, summary: String!): Thing
-      updateThing(id: String!, name: String, summary: String): Thing
-      removeThing(id: String!) : Thing
-      addRelation(from: String!, to: String!) : Thing
-      removeRelation(from: String!, to: String!) : Thing
+      updateThing(id: ID!, name: String, summary: String): Thing
+      removeThing(id: ID!) : Thing
+      addRelation(from: ID!, to: ID!) : Relation
+      removeRelation(from: ID!, to: ID!) : Relation
 
     }
   `;

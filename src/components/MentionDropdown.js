@@ -17,7 +17,10 @@ class MentionDropDown extends React.Component {
     if (props.search !== state.previousSearch) {
       return {
         previousSearch: props.search,
-        suggestions: props.filter(props.search).concat({ id: 0, name: "Add " + (props.search ? props.search : "a Thing") }),
+        suggestions: props.filter(props.search).concat({
+          id: 0,
+          name: "Add " + (props.search ? props.search : "a Thing")
+        }),
         selectedSuggestionIndex: 0
       };
     }

@@ -12,15 +12,17 @@ const Title = styled.div `
 `
 
 const Left = styled.div `
-  width: 50%
+  width: 49%
   overflow:scroll
   height: 100%
   float:left
+  // padding: 20px
 `
 
 const Right = styled.div `
-  width: 50%
+  width: 49%
   float: left
+  // padding: 20px
 `
 
 const Thing = (props) => (

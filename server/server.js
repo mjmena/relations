@@ -1,68 +1,60 @@
 const typeDefs = require("./typeDefs");
 const { ApolloServer } = require('apollo-server');
-const mongoose = require('mongoose');
-const { Thing } = require('./models');
-
-mongoose.connect('mongodb://localhost/relations');
-
+const { database, models } = require("./database");
+const Thing = models.Thing;
+const Relation = models.Relation;
+const OP = database.OP;
 (async() => {
   try {
     const resolvers = {
       Query: {
         thing: async(root, { id }) => Thing.findById(id),
-        things: async() => Thing.find(),
+        things: async() => Thing.findAll(),
       },
       Mutation: {
-        addThing: async(root, args) => {
-          const newThing = new Thing({ name: args.name, summary: args.summary });
-          await newThing.save();
-
-          return newThing;
-        },
+        addThing: async(root, args) => await Thing.create({ name: args.name, summary: args.summary }),
         updateThing: async(root, args) => {
-          const updateThing = await Thing.findById(args.id)
-          if (args.name) {
-            updateThing.name = args.name;
-          }
-          if (args.summary) {
-            updateThing.summary = args.summary;
-          }
-
-          await updateThing.save();
-          return updateThing;
+          const thing = await Thing.findById(args.id)
+          await thing.update({
+            name: args.name ? args.name : thing.name,
+            summary: args.summary ? args.summary : thing.summary
+          })
+          return thing;
         },
         removeThing: async(root, args) => {
-          const deletedThing = await Thing.findByIdAndRemove(args.id)
-          return deletedThing;
+          const thing = await Thing.findById(args.id)
+          await thing.destroy();
+          return thing
         },
-        addRelation: async(root, args) => {
-          const thing = await Thing.findByIdAndUpdate(args.from, {
-            $push: {
-              relations: {
-                to: args.to
-              }
-            }
-          })
-          thing.save()
-          return Thing.findById(args.to);
-        },
-        removeRelation: async(roots, args) => {
-          const thing = await Thing.findByIdAndUpdate(args.from, {
-            $pull: {
-              relations: {
-                to: args.to
-              }
-            }
-          })
-          thing.save()
-          return Thing.findById(args.to);
+        addRelation: async(root, args) => await Relation.create({ from_thing_id: args.from, to_thing_id: args.to }),
+        removeRelation: async(root, args) => {
+          const relation = await Relation.findOne({ where: { from_thing_id: args.from, to_thing_id: args.to } })
+          await relation.destroy()
+          return relation;
         }
-
+      },
+      Thing: {
+        relations: async(root) => {
+          return Relation.findAll({
+            where: {
+              from_thing_id: root.id
+            }
+          })
+        },
+        mentions: root => Relation.findAll({
+          where: {
+            from_thing_id: root.id
+          }
+        }),
+        mentionedBy: root => Relation.findAll({
+          where: {
+            to_thing_id: root.id
+          }
+        })
       },
       Relation: {
-        to: async(relation) => {
-          return Thing.findById(relation.to)
-        }
+        from: async(root, args) => await Thing.findById(root.from_thing_id),
+        to: async(root, args) => await Thing.findById(root.to_thing_id)
       }
     };
 
