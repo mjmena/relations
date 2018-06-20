@@ -1,13 +1,13 @@
-import React, { Fragment } from 'react';
+import React, { Fragment } from "react";
 import { Mutation } from "react-apollo";
-import { Redirect } from 'react-router-dom'
-import { GET_THINGS, ADD_THING } from '../queries'
-import { Value } from 'slate'
+import { Redirect } from "react-router-dom";
+import { GET_THINGS, ADD_THING } from "../queries";
+import { Value } from "slate";
 
 class AddThing extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { name: '' };
+    this.state = { name: "" };
 
     this.handleChange = this.handleChange.bind(this);
   }
@@ -18,33 +18,49 @@ class AddThing extends React.Component {
 
   render() {
     return (
-      <Mutation mutation={ADD_THING} >
+      <Mutation mutation={ADD_THING}>
         {(addThing, { data }) => {
-          if(data){
-            return <Redirect to={`/thing/${data.addThing.id}`} />
+          if (data) {
+            return <Redirect to={`/thing/${data.addThing.id}`} />;
           }
-        return (
-          <Fragment>
-          <h1>Add Thing</h1>
-          <form onSubmit={e => {
-            e.preventDefault();
-            let summary = Value.create({document: { nodes: [ { object: 'block', type: 'paragraph', nodes: [ { object: 'text', leaves: [ { text: '', }, ], }, ], }, ], }, })
-            addThing({
-              variables: {
-                name: this.state.name,
-                summary:JSON.stringify(summary.toJSON())
-              },
-              refetchQueries: [
-                {query: GET_THINGS}
-              ]
-            })
-          }}>
-            <input type="text" value={this.state.name} onChange={this.handleChange} />
-            <button type="submit">Add Thing</button>
-          </form>
-        </Fragment>);
+          return (
+            <Fragment>
+              <h1>Add Thing</h1>
+              <form
+                onSubmit={e => {
+                  e.preventDefault();
+                  let summary = Value.create({
+                    document: {
+                      nodes: [
+                        {
+                          object: "block",
+                          type: "paragraph",
+                          nodes: [{ object: "text", leaves: [{ text: "" }] }]
+                        }
+                      ]
+                    }
+                  });
+                  addThing({
+                    variables: {
+                      name: this.state.name,
+                      summary: JSON.stringify(summary.toJSON())
+                    },
+                    refetchQueries: [{ query: GET_THINGS }]
+                  });
+                }}
+              >
+                <input
+                  type="text"
+                  value={this.state.name}
+                  onChange={this.handleChange}
+                />
+                <button type="submit">Add Thing</button>
+              </form>
+            </Fragment>
+          );
         }}
-      </Mutation>)
+      </Mutation>
+    );
   }
 }
 

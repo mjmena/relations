@@ -1,21 +1,23 @@
-import React from 'react';
-import { Value } from 'slate';
-import { Editor } from 'slate-react';
-import MentionDropDown from './MentionDropDownContainer'
-import MentionPlugin from './../plugins/MentionPlugin'
+import React from "react";
+import { Value } from "slate";
+import { Editor } from "slate-react";
+import MentionDropDown from "./MentionDropDownContainer";
+import MentionPlugin from "./../plugins/MentionPlugin";
 
 class SummaryEditor extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       value: Value.fromJSON(JSON.parse(props.summary), {
-        plugins: [{
-          data: {
-            id: this.props.id
+        plugins: [
+          {
+            data: {
+              id: this.props.id
+            }
           }
-        }]
-      }),
-    }
+        ]
+      })
+    };
   }
 
   componentWillUnmount() {
@@ -25,16 +27,16 @@ class SummaryEditor extends React.Component {
         name: this.props.name,
         summary: JSON.stringify(this.state.value.toJSON())
       }
-    })
+    });
   }
 
-  handleChange = (change) => {
-    this.updateValue(change.value)
-  }
+  handleChange = change => {
+    this.updateValue(change.value);
+  };
 
-  updateValue = (value) => {
-    this.setState({ value })
-  }
+  updateValue = value => {
+    this.setState({ value });
+  };
 
   render() {
     return (
@@ -46,12 +48,18 @@ class SummaryEditor extends React.Component {
           autoFocus={true}
         />
         <MentionPlugin.portal value={this.state.value}>
-            {(props) => <MentionDropDown {...props} updateValue={this.updateValue} filter={this.props.filter} id={this.props.id}/>}
+          {props => (
+            <MentionDropDown
+              {...props}
+              updateValue={this.updateValue}
+              filter={this.props.filter}
+              id={this.props.id}
+            />
+          )}
         </MentionPlugin.portal>
-
       </React.Fragment>
-    )
+    );
   }
 }
 
-export default SummaryEditor
+export default SummaryEditor;

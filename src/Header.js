@@ -1,25 +1,27 @@
-import React from 'react';
-import SearchContainer from './containers/SearchContainer';
-import { NavLink } from 'react-router-dom';
-import styled from 'styled-components';
+import React from "react";
+import SearchContainer from "./containers/SearchContainer";
+import { NavLink } from "react-router-dom";
+import styled from "styled-components";
 
-const Header = styled.div `
+const Header = styled.div`
   width: 100%
   height: 5%
   clear:both
-`
+`;
 
-const Navbar = styled.div `
+const Navbar = styled.div`
   clear: both;
-`
+`;
 
-// eslint-disable-next-line
-const StyledNavLink = styled(NavLink)
-`
+const StyledNavLink = styled(NavLink)`
   text-decoration: none;
-  &:focus, &:hover, &:visited, &:link, &:active {
+  &:focus,
+  &:hover,
+  &:visited,
+  &:link,
+  &:active {
     text-decoration: none;
-  };
+  }
 
   &:hover {
     background: ${props => props.theme.secondary};
@@ -30,14 +32,17 @@ const StyledNavLink = styled(NavLink)
   display: flex;
   justify-content: center;
   align-items: center;
-  float:left`
+  float: left;
+`;
 
 export default () => {
-  return <Header>
-    <SearchContainer />
-    <Navbar>
-      <StyledNavLink to="/">Dashboard</StyledNavLink>
-      <StyledNavLink to="/thing">Create Thing</StyledNavLink>
-    </Navbar>
-  </Header>
-}
+  return (
+    <Header>
+      <SearchContainer />
+      <Navbar>
+        <StyledNavLink to="/">Dashboard</StyledNavLink>
+        <StyledNavLink to="/thing">Create Thing</StyledNavLink>
+      </Navbar>
+    </Header>
+  );
+};

@@ -1,60 +1,63 @@
 const typeDefs = require("./typeDefs");
-const { ApolloServer } = require('apollo-server');
+const { ApolloServer } = require("apollo-server");
 const { database, models } = require("./database");
 const Thing = models.Thing;
 const Relation = models.Relation;
 const OP = database.OP;
-(async() => {
+(async () => {
   try {
     const resolvers = {
       Query: {
-        thing: async(root, { id }) => Thing.findById(id),
-        things: async() => Thing.findAll(),
+        thing: async (root, { id }) => Thing.findById(id),
+        things: async () => Thing.findAll()
       },
       Mutation: {
-        addThing: async(root, args) => await Thing.create({ name: args.name, summary: args.summary }),
-        updateThing: async(root, args) => {
-          const thing = await Thing.findById(args.id)
+        addThing: async (root, args) =>
+          await Thing.create({ name: args.name, summary: args.summary }),
+        updateThing: async (root, args) => {
+          const thing = await Thing.findById(args.id);
           await thing.update({
             name: args.name ? args.name : thing.name,
             summary: args.summary ? args.summary : thing.summary
-          })
+          });
           return thing;
         },
-        removeThing: async(root, args) => {
-          const thing = await Thing.findById(args.id)
+        removeThing: async (root, args) => {
+          const thing = await Thing.findById(args.id);
           await thing.destroy();
-          return thing
+          return thing;
         },
-        addRelation: async(root, args) => await Relation.create({ from_thing_id: args.from, to_thing_id: args.to }),
-        removeRelation: async(root, args) => {
-          const relation = await Relation.findOne({ where: { from_thing_id: args.from, to_thing_id: args.to } })
-          await relation.destroy()
+        addRelation: async (root, args) =>
+          await Relation.create({
+            from_thing_id: args.from,
+            to_thing_id: args.to
+          }),
+        removeRelation: async (root, args) => {
+          const relation = await Relation.findOne({
+            where: { from_thing_id: args.from, to_thing_id: args.to }
+          });
+          await relation.destroy();
           return relation;
         }
       },
       Thing: {
-        relations: async(root) => {
+        relationsTo: async root => {
           return Relation.findAll({
             where: {
               from_thing_id: root.id
             }
-          })
+          });
         },
-        mentions: root => Relation.findAll({
-          where: {
-            from_thing_id: root.id
-          }
-        }),
-        mentionedBy: root => Relation.findAll({
-          where: {
-            to_thing_id: root.id
-          }
-        })
+        relationsFrom: root =>
+          Relation.findAll({
+            where: {
+              to_thing_id: root.id
+            }
+          })
       },
       Relation: {
-        from: async(root, args) => await Thing.findById(root.from_thing_id),
-        to: async(root, args) => await Thing.findById(root.to_thing_id)
+        from: async (root, args) => await Thing.findById(root.from_thing_id),
+        to: async (root, args) => await Thing.findById(root.to_thing_id)
       }
     };
 
@@ -65,17 +68,16 @@ const OP = database.OP;
 
     // This `listen` method launches a web-server.  Existing apps
     // can utilize middleware options, which we'll discuss later.
-    server.listen({
-      http: {
-        port: 8081
-      }
-    }).
-    then(({ url }) => {
-      console.log(`🚀  Server ready at ${url}`);
-    })
+    server
+      .listen({
+        http: {
+          port: 8081
+        }
+      })
+      .then(({ url }) => {
+        console.log(`🚀  Server ready at ${url}`);
+      });
+  } catch (err) {
+    console.log(err);
   }
-  catch (err) {
-    console.log(err)
-  }
-
 })();

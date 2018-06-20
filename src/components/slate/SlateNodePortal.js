@@ -1,29 +1,29 @@
-import React from 'react'
-import ReactDOM from 'react-dom';
-import { findDOMNode } from 'slate-react'
+import React from "react";
+import ReactDOM from "react-dom";
+import { findDOMNode } from "slate-react";
 
 class SlateNodePortal extends React.Component {
   static defaultProps = {
-    menuAnchor: 'bottom middle',
-    nodeAnchor: 'bottom middle',
+    menuAnchor: "bottom middle",
+    nodeAnchor: "bottom middle"
   };
 
   updatePosition = () => {
-    if (!this.props.node) return
-    this.element.style.position = 'absolute'
-    const box = findDOMNode(this.props.node).getBoundingClientRect()
-    this.element.style.top = `${box.top + box.height}px`
-    this.element.style.left = `${box.left}px`
-  }
+    if (!this.props.node) return;
+    this.element.style.position = "absolute";
+    const box = findDOMNode(this.props.node).getBoundingClientRect();
+    this.element.style.top = `${box.top + box.height}px`;
+    this.element.style.left = `${box.left}px`;
+  };
 
   constructor(props) {
-    super(props)
-    this.element = document.createElement('div');
-    this.updatePosition()
+    super(props);
+    this.element = document.createElement("div");
+    this.updatePosition();
   }
 
   componentDidUpdate() {
-    this.updatePosition()
+    this.updatePosition();
   }
 
   componentDidMount() {
@@ -38,11 +38,8 @@ class SlateNodePortal extends React.Component {
   }
 
   render = () => {
-    return (
-      ReactDOM.createPortal(this.props.children, this.element)
-    )
-  }
-
+    return ReactDOM.createPortal(this.props.children, this.element);
+  };
 }
 
-export default SlateNodePortal
+export default SlateNodePortal;
