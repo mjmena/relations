@@ -1,17 +1,8 @@
 import React from "react";
-// import StickyInlines from 'slate-sticky-inlines'
 import TriggeredInlinePlugin from "./TriggeredInlinePlugin";
 import ActiveMentionNode from "./../components/slate/ActiveMentionNode";
 import MentionNode from "./../components/slate/MentionNode";
 import SlateNodePortal from "./../components/slate/SlateNodePortal";
-
-// const StickyInlinePlugin = StickyInlines({
-//   allowedTypes: ['active_mention'],
-//   bannedTypes: ['mention'],
-//   canBeEmpty: false,
-//   hasStickyBoundaries: false,
-//   stickOnDelete: false,
-// })
 
 const TriggeredMentionPlugin = TriggeredInlinePlugin({
   trigger: "@",
@@ -35,9 +26,7 @@ const MentionPlugin = options => {
         isVoid: true,
         data: mention
       })
-      .collapseToStartOfNextText()
-      .focus()
-      .insertText(" ");
+      .collapseToStartOfNextText();
     return true;
   };
 

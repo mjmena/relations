@@ -5,24 +5,21 @@ import ThingLinkList from "./../components/ThingLinkList";
 import EditableThingSummary from "./EditableThingSummary";
 import { Redirect } from "react-router-dom";
 
-import { GET_THING_BY_ID, GET_THINGS, REMOVE_THING } from "../queries";
+import { GET_THING_BY_ID, REMOVE_THING } from "../queries";
 
 const Title = styled.div`
   font-size: 2em;
 `;
 
 const Left = styled.div`
-  width: 49%
-  overflow:scroll
+  width: 45%
   height: 100%
   float:left
-  // padding: 20px
 `;
 
 const Right = styled.div`
-  width: 49%
-  float: left
-  // padding: 20px
+  width: 45%
+  float: right
 `;
 
 const Thing = props => (
@@ -39,7 +36,6 @@ const Thing = props => (
             return (
               <React.Fragment>
                 <Title>{query.data.thing.name}</Title>
-                <Title>Summary</Title>
                 <Left>
                   <EditableThingSummary
                     id={query.data.thing.id}
@@ -47,24 +43,13 @@ const Thing = props => (
                   />
                 </Left>
                 <Right>
+                  <Title>Referenced by</Title>
                   <ThingLinkList
                     things={query.data.thing.relationsFrom.map(
                       relation => relation.from
                     )}
                   />
                 </Right>
-                <button
-                  onClick={event =>
-                    deleteThing({
-                      variables: {
-                        id: query.data.thing.id
-                      },
-                      refetchQueries: [{ query: GET_THINGS }]
-                    })
-                  }
-                >
-                  Delete {query.data.thing.name}
-                </button>
               </React.Fragment>
             );
           }}

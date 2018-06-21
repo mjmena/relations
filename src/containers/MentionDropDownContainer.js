@@ -23,7 +23,6 @@ class MentionDropdownContainer extends React.Component {
               >
                 {query => {
                   if (query.loading || query.error) return null;
-                  console.log(query);
                   return (
                     <MentionDropdown
                       {...this.props}

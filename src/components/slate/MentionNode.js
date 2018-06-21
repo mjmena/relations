@@ -85,6 +85,7 @@ class MentionNode extends React.Component {
               {...this.props.attributes}
               onMouseEnter={event => this.setState({ hovering: true })}
               onMouseLeave={event => this.setState({ hovering: false })}
+              contentEditable={false}
             >
               {data.thing.name}
               {this.state.hovering ? (

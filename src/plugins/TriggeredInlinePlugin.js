@@ -14,7 +14,7 @@ const TriggeredInlinePlugin = options => {
         })
         .collapseToStartOfNextText()
         .insertText(" ")
-        .extendToEndOfPreviousText();
+        .collapseToEndOfPreviousText();
       event.preventDefault();
       return true;
     }
@@ -27,13 +27,15 @@ const TriggeredInlinePlugin = options => {
       const textNodeIndex = change.value.focusBlock.nodes.findIndex(
         node => node.key === change.value.focusText.key
       );
+
       //check the node before it to see if its an inline
       const upcomingNode = change.value.focusBlock.nodes.get(textNodeIndex - 1);
-      if (Inline.isInline(upcomingNode)) {
+      if (Inline.isInline(upcomingNode) && upcomingNode.type === type) {
         //put me at the end of the inline
-        return change.extendToEndOf(upcomingNode);
+        return change.collapseToEndOf(upcomingNode);
       }
     }
+    return change;
   };
 
   const renderNode = props => {

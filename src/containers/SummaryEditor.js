@@ -3,6 +3,14 @@ import { Value } from "slate";
 import { Editor } from "slate-react";
 import MentionDropDown from "./MentionDropDownContainer";
 import MentionPlugin from "./../plugins/MentionPlugin";
+import styled from "styled-components";
+
+const StyledEditor = styled(Editor)`
+  margin: auto
+  min-height: 20%
+  box-shadow: 10px 5px 5px #000
+  background: ${props => props.theme.primary}
+`;
 
 class SummaryEditor extends React.Component {
   constructor(props) {
@@ -18,6 +26,17 @@ class SummaryEditor extends React.Component {
         ]
       })
     };
+  }
+
+  componentDidMount() {
+    this.setState(state => {
+      return {
+        value: state.value
+          .change()
+          .focus()
+          .collapseToEndOfBlock().value
+      };
+    });
   }
 
   componentWillUnmount() {
@@ -41,11 +60,10 @@ class SummaryEditor extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <Editor
+        <StyledEditor
           value={this.state.value}
           onChange={this.handleChange}
           plugins={MentionPlugin.plugins}
-          autoFocus={true}
         />
         <MentionPlugin.portal value={this.state.value}>
           {props => (
