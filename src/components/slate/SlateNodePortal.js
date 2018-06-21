@@ -3,11 +3,6 @@ import ReactDOM from "react-dom";
 import { findDOMNode } from "slate-react";
 
 class SlateNodePortal extends React.Component {
-  static defaultProps = {
-    menuAnchor: "bottom middle",
-    nodeAnchor: "bottom middle"
-  };
-
   updatePosition = () => {
     if (!this.props.node) return;
     this.element.style.position = "absolute";

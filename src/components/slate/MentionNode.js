@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Query, Mutation } from "react-apollo";
 import styled from "styled-components";
 import MentionNodeTooltip from "./MentionNodeTooltip";
+import Delay from "./../Delay";
 import {
   GET_THING_BY_ID,
   REMOVE_RELATION,
@@ -16,7 +17,21 @@ const BrokenLink = styled.span`
 `;
 
 const ThemedLink = styled(Link)`
-  text-decoration: none;
+  text-decoration,
+  &:focus,
+  &:hover,
+  &:visited,
+  &:link,
+  &:active {
+    text-decoration: none;
+  }
+
+  &:hover {
+    background: ${props => props.theme.secondary};
+  }
+
+  background: ${props => props.theme.tertiary};
+  color: ${props => props.theme.primary};
 `;
 
 class MentionNode extends React.Component {
@@ -88,12 +103,18 @@ class MentionNode extends React.Component {
               contentEditable={false}
             >
               {data.thing.name}
-              {this.state.hovering ? (
-                <MentionNodeTooltip
-                  node={this.props.node}
-                  summary={data.thing.summary}
-                />
-              ) : null}
+              <Delay start={this.state.hovering}>
+                {delay =>
+                  delay ? (
+                    <span />
+                  ) : (
+                    <MentionNodeTooltip
+                      node={this.props.node}
+                      summary={data.thing.summary}
+                    />
+                  )
+                }
+              </Delay>
             </ThemedLink>
           );
         }}

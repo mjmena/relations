@@ -27,6 +27,7 @@ const StyledNavLink = styled(NavLink)`
   &:hover {
     background: ${props => props.theme.secondary};
   }
+
   border: 2px solid ${props => props.theme.secondary};
   background: ${props => props.theme.tertiary};
   color: ${props => props.theme.primary};

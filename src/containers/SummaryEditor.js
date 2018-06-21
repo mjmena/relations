@@ -8,8 +8,9 @@ import styled from "styled-components";
 const StyledEditor = styled(Editor)`
   margin: auto
   min-height: 20%
-  box-shadow: 10px 5px 5px #000
+  box-shadow: 10px 5px 5px ${props => props.theme.secondary}
   background: ${props => props.theme.primary}
+  border: 1px solid ${props => props.theme.tertiary}
 `;
 
 class SummaryEditor extends React.Component {
