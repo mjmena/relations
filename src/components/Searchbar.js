@@ -1,23 +1,35 @@
-import React, { Fragment } from 'react';
-import ThingLinkList from './ThingLinkList';
+import React, { Fragment } from "react";
+import ThingLinkList from "./ThingLinkList";
+import Dropdown from "./Dropdown";
 
 class Searchbar extends React.Component {
+  state = {
+    value: ""
+  };
+
   constructor(props) {
     super(props);
-    this.state = { value: '' };
-
-    this.handleChange = this.handleChange.bind(this);
+    this.relative = React.createRef();
   }
 
-  handleChange(event) {
+  handleChange = event => {
     this.setState({ value: event.target.value });
-  }
+  };
 
   render() {
-    return <Fragment>
-      <input type="text" value={this.state.value} onChange={this.handleChange} />
-      <ThingLinkList things={this.props.search(this.state.value)} />
-    </Fragment>
+    return (
+      <Fragment>
+        <input
+          ref={this.relative}
+          type="text"
+          value={this.state.value}
+          onChange={this.handleChange}
+        />
+        <Dropdown relative={this.relative}>
+          <ThingLinkList things={this.props.search(this.state.value)} />
+        </Dropdown>
+      </Fragment>
+    );
   }
 }
 

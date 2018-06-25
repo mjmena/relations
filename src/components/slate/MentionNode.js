@@ -16,28 +16,35 @@ const BrokenLink = styled.span`
   font-style: italic;
 `;
 
-const ThemedLink = styled(Link)`
-  text-decoration,
-  &:focus,
-  &:hover,
-  &:visited,
-  &:link,
-  &:active {
-    text-decoration: none;
-  }
+const Option = styled.span`
+  background: ${props => props.theme.tertiary};
 
   &:hover {
     background: ${props => props.theme.secondary};
   }
 
-  background: ${props => props.theme.tertiary};
-  color: ${props => props.theme.primary};
+  > a {
+    text-decoration,
+    &:focus,
+    &:hover,
+    &:visited,
+    &:link,
+    &:active {
+      text-decoration: none;
+    }
+    color: ${props => props.theme.primary};
+  }
 `;
 
 class MentionNode extends React.Component {
   state = {
     hovering: false
   };
+
+  constructor(props) {
+    super(props);
+    this.relative = React.createRef();
+  }
 
   componentWillUnmount() {
     const document = this.props.editor.value.document;
@@ -95,27 +102,29 @@ class MentionNode extends React.Component {
           if (error)
             return <BrokenLink>{this.props.node.data.get("name")}</BrokenLink>;
           return (
-            <ThemedLink
-              to={"/thing/" + data.thing.id}
-              {...this.props.attributes}
-              onMouseEnter={event => this.setState({ hovering: true })}
-              onMouseLeave={event => this.setState({ hovering: false })}
-              contentEditable={false}
-            >
-              {data.thing.name}
-              <Delay start={this.state.hovering}>
-                {delay =>
-                  delay ? (
-                    <span />
-                  ) : (
-                    <MentionNodeTooltip
-                      node={this.props.node}
-                      summary={data.thing.summary}
-                    />
-                  )
-                }
-              </Delay>
-            </ThemedLink>
+            <Option innerRef={this.relative}>
+              <Link
+                to={"/thing/" + data.thing.id}
+                {...this.props.attributes}
+                onMouseEnter={event => this.setState({ hovering: true })}
+                onMouseLeave={event => this.setState({ hovering: false })}
+                contentEditable={false}
+              >
+                {data.thing.name}
+                <Delay start={this.state.hovering}>
+                  {delay =>
+                    delay ? (
+                      <span />
+                    ) : (
+                      <MentionNodeTooltip
+                        relative={this.relative}
+                        summary={data.thing.summary}
+                      />
+                    )
+                  }
+                </Delay>
+              </Link>
+            </Option>
           );
         }}
       </Query>
