@@ -17,7 +17,8 @@ const BrokenLink = styled.span`
 `;
 
 const Option = styled.span`
-  background: ${props => props.theme.tertiary};
+  background: ${props =>
+    props.isSelected ? props.theme.secondary : props.theme.tertiary};
 
   &:hover {
     background: ${props => props.theme.secondary};
@@ -102,7 +103,7 @@ class MentionNode extends React.Component {
           if (error)
             return <BrokenLink>{this.props.node.data.get("name")}</BrokenLink>;
           return (
-            <Option innerRef={this.relative}>
+            <Option innerRef={this.relative} isSelected={this.props.isSelected}>
               <Link
                 to={"/thing/" + data.thing.id}
                 {...this.props.attributes}
