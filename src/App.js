@@ -31,7 +31,7 @@ class App extends React.Component {
               <Switch>
                 <Route exact path="/" component={Dashboard} />
                 <Route exact path="/thing" component={CreateThing} />
-                <Route path="/thing/:id" component={EditThing} />
+                <Route path="/thing/:name" component={EditThing} />
               </Switch>
             </Body>
           </Background>

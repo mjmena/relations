@@ -9,6 +9,12 @@ const OP = database.OP;
     const resolvers = {
       Query: {
         thing: async (root, { id }) => Thing.findById(id),
+        thingByName: async (root, { name }) =>
+          Thing.findOne({
+            where: {
+              name
+            }
+          }),
         things: async () => Thing.findAll()
       },
       Mutation: {

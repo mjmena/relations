@@ -53,6 +53,22 @@ export const GET_THING_BY_ID = gql`
   }
 `;
 
+export const GET_THING_BY_NAME = gql`
+  query getThingByName($name: String!) {
+    thingByName(name: $name) {
+      id
+      name
+      summary
+      relationsFrom {
+        from {
+          id
+          name
+        }
+      }
+    }
+  }
+`;
+
 export const ADD_THING = gql`
   mutation addThing($name: String!, $summary: String!) {
     addThing(name: $name, summary: $summary) {

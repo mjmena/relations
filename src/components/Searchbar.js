@@ -51,7 +51,7 @@ class Searchbar extends React.Component {
       event.preventDefault();
       this.setState(state => {
         return {
-          navigating: this.getOptions(state.search)[state.selected].id
+          navigating: this.getOptions(state.search)[state.selected].name
         };
       });
     }
@@ -120,6 +120,6 @@ const SearchOptions = props =>
       key={option.id}
       onMouseOver={event => props.handleSelect(event, index)}
     >
-      <Link to={"/thing/" + option.id}>{option.name} </Link>
+      <Link to={"/thing/" + option.name}>{option.name} </Link>
     </Option>
   ));

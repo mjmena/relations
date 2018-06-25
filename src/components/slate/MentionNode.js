@@ -94,7 +94,7 @@ class MentionNode extends React.Component {
           if (loading)
             return (
               <Link
-                to={"/thing/" + this.props.node.data.get("id")}
+                to={"/thing/" + this.props.node.data.get("name")}
                 {...this.props.attributes}
               >
                 {this.props.node.data.get("name")}
@@ -105,7 +105,7 @@ class MentionNode extends React.Component {
           return (
             <Option innerRef={this.relative} isSelected={this.props.isSelected}>
               <Link
-                to={"/thing/" + data.thing.id}
+                to={"/thing/" + data.thing.name}
                 {...this.props.attributes}
                 onMouseEnter={event => this.setState({ hovering: true })}
                 onMouseLeave={event => this.setState({ hovering: false })}

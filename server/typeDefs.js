@@ -19,6 +19,7 @@ module.exports = gql`
 
   type Query {
     thing(id: ID!): Thing!
+    thingByName(name: String!): Thing!
     things: [Thing]
   }
 
