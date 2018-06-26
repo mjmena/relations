@@ -12,22 +12,28 @@ const Title = styled.div`
 `;
 
 const Left = styled.div`
-  width: 45%
-  height: 100%
-  float:left
+  flex-display: column;
+  flex-grow: 3;
+  align-items: stretch;
+`;
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: row;
 `;
 
 const Right = styled.div`
-  width: 45%
-  float: right
+  flex-grow: 1;
+  text-align: right;
 `;
 
 const EditThing = props => {
   const { thing } = props;
   return (
-    <React.Fragment>
-      <Title>{thing.name}</Title>
+    <Container>
       <Left>
+        <Title>{thing.name}</Title>
+
         <EditableThingSummary id={thing.id} summary={thing.summary} />
       </Left>
       <Right>
@@ -36,7 +42,7 @@ const EditThing = props => {
           things={thing.relationsFrom.map(relation => relation.from)}
         />
       </Right>
-    </React.Fragment>
+    </Container>
   );
 };
 

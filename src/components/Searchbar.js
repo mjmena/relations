@@ -1,11 +1,11 @@
 import React, { Fragment } from "react";
-import Dropdown from "./Dropdown";
+import DropdownComponent from "./Dropdown";
 import styled from "styled-components";
 import memoize from "memoize-one";
 import { Link, Redirect } from "react-router-dom";
 import { withRouter } from "react-router";
 
-const DropdownWell = styled.div`
+const Dropdown = styled(DropdownComponent)`
   background: white;
   border: 1px solid black;
 `;
@@ -14,7 +14,8 @@ class Searchbar extends React.Component {
   state = {
     search: "",
     selected: 0,
-    navigating: null
+    navigating: false,
+    creating: false
   };
 
   constructor(props) {
@@ -36,24 +37,32 @@ class Searchbar extends React.Component {
     if (event.key === "ArrowUp") {
       event.preventDefault();
       this.setState(state => {
+        let index = state.selected - 1;
+        if (index < 0) index = this.getOptions(state.search).length - 1;
+
         return {
-          selected: state.selected - 1
+          selected: index
         };
       });
     } else if (event.key === "ArrowDown") {
       event.preventDefault();
       this.setState(state => {
+        let index = state.selected + 1;
+        if (index === this.getOptions(state.search).length) index = 0;
         return {
-          selected: state.selected + 1
+          selected: index
         };
       });
     } else if (event.key === "Enter") {
       event.preventDefault();
-      this.setState(state => {
-        return {
-          navigating: this.getOptions(state.search)[state.selected].name
-        };
-      });
+      if (
+        this.state.selected + 1 ===
+        this.getOptions(this.state.search).length
+      ) {
+        this.setState({ creating: true });
+      } else {
+        this.setState({ navigating: true });
+      }
     }
   };
 
@@ -61,11 +70,21 @@ class Searchbar extends React.Component {
     this.setState({ selected: index });
   };
 
-  getOptions = memoize(search => this.props.search(search));
+  getOptions = memoize(search =>
+    this.props.search(search).concat([{ id: -1, name: "Create " + search }])
+  );
 
   render() {
     if (this.state.navigating)
-      return <Redirect to={"/thing/" + this.state.navigating} push={true} />;
+      return (
+        <Redirect
+          to={
+            "/thing/" +
+            this.getOptions(this.state.search)[this.state.selected].name
+          }
+          push={true}
+        />
+      );
     return (
       <Fragment>
         <input
@@ -78,24 +97,30 @@ class Searchbar extends React.Component {
         />
         {this.state.search && (
           <Dropdown relative={this.relative}>
-            <DropdownWell>
-              <SearchOptions
-                options={this.getOptions(this.state.search)}
-                selected={Math.abs(
-                  this.state.selected %
-                    this.getOptions(this.state.search).length
-                )}
-                handleSelect={this.handleSelect}
-              />
-            </DropdownWell>
+            <SearchOptions
+              options={this.getOptions(this.state.search)}
+              selected={this.state.selected}
+              handleSelect={this.handleSelect}
+            />
           </Dropdown>
         )}
+        <CreateThingPortal
+          active={this.state.creating}
+          thing={this.state.search}
+        />
       </Fragment>
     );
   }
 }
 
 export default withRouter(Searchbar);
+
+class CreateThingPortal extends React.Component {
+  render() {
+    if (!this.props.active) return null;
+    return <div>{this.props.thing}</div>;
+  }
+}
 
 const Option = styled.div`
   background: ${props =>

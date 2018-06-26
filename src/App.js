@@ -11,15 +11,12 @@ const Background = styled.div`
   height: ${props => props.height - 20}px
   width: ${props => props.width - 20}px
   color: ${props => props.theme.secondary}
+  display: flex;
   padding: 10px
   font-family: Josefin Sans
+  flex-direction: column;
 `;
 
-const Body = styled.div`
-  height: 90%
-  width: 90%
-  float:left
-`;
 class App extends React.Component {
   render() {
     return (
@@ -27,13 +24,11 @@ class App extends React.Component {
         {({ height, width }) => (
           <Background height={height} width={width}>
             <Header />
-            <Body>
-              <Switch>
-                <Route exact path="/" component={Dashboard} />
-                <Route exact path="/thing" component={CreateThing} />
-                <Route path="/thing/:name" component={EditThing} />
-              </Switch>
-            </Body>
+            <Switch>
+              <Route exact path="/" component={Dashboard} />
+              <Route exact path="/thing" component={CreateThing} />
+              <Route path="/thing/:name" component={EditThing} />
+            </Switch>
           </Background>
         )}
       </Resize>
