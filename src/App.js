@@ -4,7 +4,6 @@ import styled from "styled-components";
 import Resize from "./containers/Resize";
 import Header from "./Header";
 import Dashboard from "./Dashboard";
-import CreateThing from "./containers/CreateThing";
 import EditThing from "./containers/EditThing";
 
 const Background = styled.div`
@@ -26,7 +25,6 @@ class App extends React.Component {
             <Header />
             <Switch>
               <Route exact path="/" component={Dashboard} />
-              <Route exact path="/thing" component={CreateThing} />
               <Route path="/thing/:name" component={EditThing} />
             </Switch>
           </Background>

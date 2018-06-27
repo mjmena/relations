@@ -4,7 +4,7 @@ import styled from "styled-components";
 import memoize from "memoize-one";
 import { Link, Redirect } from "react-router-dom";
 import { withRouter } from "react-router";
-
+import CreateThingPortal from "./../containers/CreateThingPortal";
 const Dropdown = styled(DropdownComponent)`
   background: white;
   border: 1px solid black;
@@ -14,7 +14,7 @@ class Searchbar extends React.Component {
   state = {
     search: "",
     selected: 0,
-    navigating: false,
+    navigating: null,
     creating: false
   };
 
@@ -61,7 +61,10 @@ class Searchbar extends React.Component {
       ) {
         this.setState({ creating: true });
       } else {
-        this.setState({ navigating: true });
+        this.setState({
+          navigating: this.getOptions(this.state.search)[this.state.selected]
+            .name
+        });
       }
     }
   };
@@ -74,26 +77,31 @@ class Searchbar extends React.Component {
     this.props.search(search).concat([{ id: -1, name: "Create " + search }])
   );
 
+  handleClose = (event, name) => {
+    this.setState({ creating: false, search: "", selected: 0 });
+  };
+
+  handleCancel = event => {
+    this.setState({ creating: false });
+    this.relative.current.focus();
+  };
+
+  handleConfirm = name => {
+    this.setState({ creating: false, navigating: name });
+  };
+
   render() {
     if (this.state.navigating)
-      return (
-        <Redirect
-          to={
-            "/thing/" +
-            this.getOptions(this.state.search)[this.state.selected].name
-          }
-          push={true}
-        />
-      );
+      return <Redirect to={"/thing/" + this.state.navigating} push={true} />;
     return (
       <Fragment>
         <input
           ref={this.relative}
           type="text"
+          placeholder="Search or Create"
           value={this.state.search}
           onChange={this.handleChange}
           onKeyDown={this.handleKeyboardNavigation}
-          autoFocus
         />
         {this.state.search && (
           <Dropdown relative={this.relative}>
@@ -107,6 +115,8 @@ class Searchbar extends React.Component {
         <CreateThingPortal
           active={this.state.creating}
           thing={this.state.search}
+          onCancel={this.handleCancel}
+          onConfirm={this.handleConfirm}
         />
       </Fragment>
     );
@@ -114,13 +124,6 @@ class Searchbar extends React.Component {
 }
 
 export default withRouter(Searchbar);
-
-class CreateThingPortal extends React.Component {
-  render() {
-    if (!this.props.active) return null;
-    return <div>{this.props.thing}</div>;
-  }
-}
 
 const Option = styled.div`
   background: ${props =>

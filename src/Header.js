@@ -4,22 +4,14 @@ import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 
 const Header = styled.div`
-  flex-direction: column;
-`;
-
-const SearchSection = styled.div`
   justify-content: center;
   align-items: center;
   text-align: center;
-`;
-
-const Navbar = styled.div`
-  display: flex;
   flex-direction: row;
-  justify-content: center;
+  padding-bottom: 20px;
 `;
 
-const StyledNavLink = styled(NavLink)`
+const HomeButton = styled(NavLink)`
   text-decoration: none;
   &:focus,
   &:hover,
@@ -36,22 +28,13 @@ const StyledNavLink = styled(NavLink)`
   border: 2px solid ${props => props.theme.secondary};
   background: ${props => props.theme.tertiary};
   color: ${props => props.theme.primary};
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  float: left;
 `;
 
 export default () => {
   return (
     <Header>
-      <SearchSection>
-        <SearchContainer />
-      </SearchSection>
-      <Navbar>
-        <StyledNavLink to="/">Dashboard</StyledNavLink>
-        <StyledNavLink to="/thing">Create Thing</StyledNavLink>
-      </Navbar>
+      <HomeButton to="/">Dashboard</HomeButton>
+      <SearchContainer />
     </Header>
   );
 };

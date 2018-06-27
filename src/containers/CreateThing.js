@@ -1,67 +1,83 @@
-import React, { Fragment } from "react";
+import React from "react";
 import { Mutation } from "react-apollo";
-import { Redirect } from "react-router-dom";
 import { GET_THINGS, ADD_THING } from "../queries";
 import { Value } from "slate";
 
-class AddThing extends React.Component {
+class CreateThing extends React.Component {
+  state = {
+    name: this.props.name
+  };
+
   constructor(props) {
     super(props);
-    this.state = { name: "" };
-
-    this.handleChange = this.handleChange.bind(this);
+    this.node = React.createRef();
   }
 
-  handleChange(event) {
+  componentDidMount() {
+    this.node.current.focus();
+  }
+
+  handleChange = event => {
     this.setState({ name: event.target.value });
-  }
+  };
+
+  handleSubmit = event => {
+    event.preventDefault();
+    const summary = Value.create({
+      document: {
+        nodes: [
+          {
+            object: "block",
+            type: "paragraph",
+            nodes: [{ object: "text", leaves: [{ text: "" }] }]
+          }
+        ]
+      }
+    });
+
+    this.props
+      .handleAdd({
+        variables: {
+          name: this.state.name,
+          summary: JSON.stringify(summary.toJSON())
+        },
+        refetchQueries: [{ query: GET_THINGS }]
+      })
+      .then(({ data }) => {
+        this.props.onConfirm(data.addThing.name);
+      });
+  };
+
+  handleExit = event => {
+    if (event.key === "Escape") {
+      this.props.onCancel(event);
+    }
+  };
 
   render() {
     return (
-      <Mutation mutation={ADD_THING}>
-        {(addThing, { data }) => {
-          if (data) {
-            return <Redirect to={`/thing/${data.addThing.id}`} />;
-          }
-          return (
-            <Fragment>
-              <h1>Add Thing</h1>
-              <form
-                onSubmit={e => {
-                  e.preventDefault();
-                  let summary = Value.create({
-                    document: {
-                      nodes: [
-                        {
-                          object: "block",
-                          type: "paragraph",
-                          nodes: [{ object: "text", leaves: [{ text: "" }] }]
-                        }
-                      ]
-                    }
-                  });
-                  addThing({
-                    variables: {
-                      name: this.state.name,
-                      summary: JSON.stringify(summary.toJSON())
-                    },
-                    refetchQueries: [{ query: GET_THINGS }]
-                  });
-                }}
-              >
-                <input
-                  type="text"
-                  value={this.state.name}
-                  onChange={this.handleChange}
-                />
-                <button type="submit">Add Thing</button>
-              </form>
-            </Fragment>
-          );
-        }}
-      </Mutation>
+      <React.Fragment>
+        <h1>Add Thing</h1>
+        <form onSubmit={this.handleSubmit}>
+          <input
+            type="text"
+            value={this.state.name}
+            onChange={this.handleChange}
+            onKeyDown={this.handleExit}
+            ref={this.node}
+          />
+        </form>
+      </React.Fragment>
     );
   }
 }
 
-export default AddThing;
+const CreateThingMutation = props => (
+  <Mutation mutation={ADD_THING}>
+    {addThing => {
+      return <CreateThing handleAdd={addThing} {...props} />;
+    }}
+  </Mutation>
+);
+
+export default CreateThingMutation;
