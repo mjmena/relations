@@ -7,27 +7,13 @@ import ApolloClient from "apollo-boost";
 import "./styles.css";
 import App from "./App";
 
-const client = new ApolloClient({
-  defaultOptions: {
-    watchQuery: {
-      fetchPolicy: "network-only",
-      errorPolicy: "all"
-    },
-    query: {
-      fetchPolicy: "network-only",
-      errorPolicy: "all"
-    },
-    mutate: {
-      errorPolicy: "all"
-    }
-  }
-});
+const client = new ApolloClient();
 
 const theme = {
-  // primary: 'linen',
   primary: "white",
   secondary: "black",
-  tertiary: "grey"
+  tertiary: "grey",
+  font: "Josefin Sans"
 };
 
 ReactDOM.render(

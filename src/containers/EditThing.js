@@ -2,14 +2,11 @@ import React from "react";
 import { Query, Mutation } from "react-apollo";
 import styled from "styled-components";
 import ThingLinkList from "./../components/ThingLinkList";
+import EditableThingName from "./EditableThingName";
 import EditableThingSummary from "./EditableThingSummary";
 import { Redirect } from "react-router-dom";
 
 import { GET_THING_BY_NAME, REMOVE_THING } from "../queries";
-
-const Title = styled.div`
-  font-size: 2em;
-`;
 
 const Left = styled.div`
   flex-display: column;
@@ -32,12 +29,10 @@ const EditThing = props => {
   return (
     <Container>
       <Left>
-        <Title>{thing.name}</Title>
-
+        <EditableThingName id={thing.id} name={thing.name} />
         <EditableThingSummary id={thing.id} summary={thing.summary} />
       </Left>
       <Right>
-        <Title>Referenced by</Title>
         <ThingLinkList
           things={thing.relationsFrom.map(relation => relation.from)}
         />
@@ -61,7 +56,13 @@ const EditThingContainer = props => {
               if (data) {
                 return <Redirect to={`/`} />;
               }
-              return <EditThing thing={query.data.thingByName} />;
+              return (
+                <EditThing
+                  key={query.data.thingByName.id}
+                  thing={query.data.thingByName}
+                  deleteThing={deleteThing}
+                />
+              );
             }}
           </Mutation>
         );

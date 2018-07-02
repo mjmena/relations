@@ -4,6 +4,7 @@ import { Editor } from "slate-react";
 import MentionDropDown from "./MentionDropDownContainer";
 import MentionPlugin from "./../plugins/MentionPlugin";
 import styled from "styled-components";
+import { debounce } from "lodash";
 
 const StyledEditor = styled(Editor)`
   box-shadow: 10px 5px 5px ${props => props.theme.secondary}
@@ -15,15 +16,7 @@ class SummaryEditor extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: Value.fromJSON(JSON.parse(props.summary), {
-        plugins: [
-          {
-            data: {
-              id: this.props.id
-            }
-          }
-        ]
-      })
+      value: Value.fromJSON(JSON.parse(props.summary))
     };
   }
 
@@ -35,10 +28,18 @@ class SummaryEditor extends React.Component {
           .focus()
           .collapseToEndOfBlock().value
       };
-    });
+    }, this.handleSave.cancel);
   }
 
   componentWillUnmount() {
+    this.handleSave.flush();
+  }
+
+  handleSave = debounce(() => {
+    const mentions = this.state.value.document.filterDescendants(
+      node => node.type === "mention"
+    );
+    console.log(mentions);
     this.props.updateThing({
       variables: {
         id: this.props.id,
@@ -46,14 +47,14 @@ class SummaryEditor extends React.Component {
         summary: JSON.stringify(this.state.value.toJSON())
       }
     });
-  }
+  }, 2000);
 
   handleChange = change => {
     this.updateValue(change.value);
   };
 
   updateValue = value => {
-    this.setState({ value });
+    this.setState({ value }, this.handleSave);
   };
 
   render() {
@@ -74,6 +75,7 @@ class SummaryEditor extends React.Component {
             />
           )}
         </MentionPlugin.portal>
+        <button onClick={this.handleSave}>Save Summary</button>
       </React.Fragment>
     );
   }
